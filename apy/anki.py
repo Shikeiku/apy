@@ -331,7 +331,7 @@ class Anki:
 
 
     def add_notes_with_editor(self, tags='', model_name=None, deck_name=None,
-                              template=None):
+                              template=None, conversion='markdown'):
         """Add new notes to collection with editor"""
         if isinstance(template, Note):
             input_string = template.get_template()
@@ -353,7 +353,7 @@ class Anki:
 
             input_string += [f'tags: {tags}']
 
-            if model_name != 'Basic':
+            if conversion != 'markdown':
                 input_string += ['markdown: false']
 
             input_string += ['\n# Note\n']
