@@ -98,8 +98,10 @@ def add_single(fields, tags=None, preset=None, model_name=None, deck=None):
 @click.option('-m', '--model', 'model_name', default='Basic',
               help=('Specify default model for new cards.'))
 @click.option('-d', '--deck',
-              help=('Specify defauly deck for new cards.'))
-def add(tags, model_name, deck):
+              help=('Specify default deck for new cards.'))
+@click.option('-c', '--conversion', default='markdown',
+              help=('Specify if markdown to html conversion should be done, if not given the text in fields is treated as plain text.'))
+def add(tags, model_name, deck, conversion):
     """Add notes interactively from terminal.
 
     Examples:
@@ -113,7 +115,7 @@ def add(tags, model_name, deck):
         apy add -m ASK -d ask
     """
     with Anki(**cfg) as a:
-        notes = a.add_notes_with_editor(tags, model_name, deck)
+        notes = a.add_notes_with_editor(tags, model_name, deck, conversion)
         n_notes = len(notes)
         if n_notes == 0:
             click.echo("No notes added")
