@@ -11,6 +11,7 @@ from markdown.extensions.def_list import DefListExtension
 from markdown.extensions.fenced_code import FencedCodeExtension
 from markdown.extensions.footnotes import FootnoteExtension
 
+from apy.config import cfg
 
 def markdown_file_to_notes(filename):
     """Parse notes data from Markdown file
@@ -159,6 +160,9 @@ def _parse_file(filename):
 
     return defaults, notes
 
+def config_styles(plain, subfield, replace):
+    plain = re.sub(r'<('+subfield+r')>([\w\s\d.,&\n]*?)</'+subfield+r'>', replace['begin'] + r'\2' + replace['end'], plain)
+    return plain
 
 def markdown_to_html(plain):
     """Convert Markdown to HTML"""
@@ -180,6 +184,11 @@ def markdown_to_html(plain):
     plain = plain.replace(r"\]", r"\\]")
     plain = plain.replace(r"\(", r"\\(")
     plain = plain.replace(r"\)", r"\\)")
+
+    # Personal styling
+    if 'subfields' in cfg.keys():
+        for subfield in cfg['subfields']:
+            plain = config_styles(plain, subfield, cfg['subfields'][subfield])
 
     html = markdown.markdown(plain, extensions=[
         'tables',
